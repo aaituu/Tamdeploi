@@ -1,3 +1,4 @@
+<!-- auth.html -->
 <!DOCTYPE html>
 <html lang="ru">
   <head>
@@ -56,29 +57,6 @@
       .logo p {
         color: #7f8c8d;
         font-size: 0.95em;
-      }
-
-      .tabs {
-        display: flex;
-        gap: 10px;
-        margin-bottom: 30px;
-      }
-
-      .tab {
-        flex: 1;
-        padding: 12px;
-        border: none;
-        background: #ecf0f1;
-        border-radius: 10px;
-        cursor: pointer;
-        font-size: 1em;
-        font-weight: 600;
-        transition: all 0.3s;
-      }
-
-      .tab.active {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
       }
 
       .form-group {
@@ -145,10 +123,6 @@
         margin-bottom: 20px;
         display: none;
       }
-
-      .hidden {
-        display: none;
-      }
     </style>
   </head>
   <body>
@@ -156,11 +130,6 @@
       <div class="logo">
         <h1>🎮 Tamada Games</h1>
         <p>Авторизуйтесь для доступа к играм</p>
-      </div>
-
-      <div class="tabs">
-        <button class="tab active" id="loginTab">Вход</button>
-        <button class="tab" id="registerTab">Регистрация</button>
       </div>
 
       <div id="errorMessage" class="error-message"></div>
@@ -177,252 +146,9 @@
         </div>
         <button type="submit" class="btn">Войти</button>
       </form>
-
-      <form id="registerForm" class="hidden">
-        <div class="form-group">
-          <label>Имя (необязательно)</label>
-          <input type="text" id="registerName" />
-        </div>
-        <div class="form-group">
-          <label>Email</label>
-          <input type="email" id="registerEmail" required />
-        </div>
-        <div class="form-group">
-          <label>Пароль</label>
-          <input type="password" id="registerPassword" required minlength="6" />
-        </div>
-        <button type="submit" class="btn">Зарегистрироваться</button>
-      </form>
     </div>
 
-    <!-- Сначала загружаем auth.js -->
     <script src="global/scripts/auth.js"></script>
-
-    <!-- Потом используем API_URL из authHelpers -->
-    <script>
-      (function () {
-        "use strict";
-
-        // Получаем API_URL из глобального хелпера
-        const API_URL = window.authHelpers.API_URL;
-        console.log("Auth page loaded, API_URL:", API_URL);
-
-        // Проверка при загрузке
-        window.addEventListener("DOMContentLoaded", async function () {
-          console.log("Page loaded");
-          const token =
-            localStorage.getItem("token") || sessionStorage.getItem("token");
-
-          if (token) {
-            console.log("Token found, verifying...");
-            try {
-              const response = await fetch(`${API_URL}/auth/verify.php`, {
-                method: "GET",
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                  "Content-Type": "application/json",
-                },
-                credentials: "include",
-              });
-
-              console.log("Verify response status:", response.status);
-
-              if (response.ok) {
-                const data = await response.json();
-                console.log("Verify response:", data);
-
-                if (data.success) {
-                  console.log("Token valid, redirecting...");
-                  window.location.href = "/index.html";
-                  return;
-                }
-              }
-
-              console.log("Token invalid, clearing...");
-              localStorage.removeItem("token");
-              sessionStorage.removeItem("token");
-            } catch (error) {
-              console.error("Token verification error:", error);
-              localStorage.removeItem("token");
-              sessionStorage.removeItem("token");
-            }
-          } else {
-            console.log("No token found");
-          }
-        });
-
-        // Переключение табов
-        function switchTab(tab) {
-          const loginForm = document.getElementById("loginForm");
-          const registerForm = document.getElementById("registerForm");
-          const loginTab = document.getElementById("loginTab");
-          const registerTab = document.getElementById("registerTab");
-
-          if (tab === "login") {
-            loginForm.classList.remove("hidden");
-            registerForm.classList.add("hidden");
-            loginTab.classList.add("active");
-            registerTab.classList.remove("active");
-          } else {
-            loginForm.classList.add("hidden");
-            registerForm.classList.remove("hidden");
-            loginTab.classList.remove("active");
-            registerTab.classList.add("active");
-          }
-
-          clearMessages();
-        }
-
-        // Экспортируем в window
-        window.switchTab = switchTab;
-
-        // События для табов
-        document
-          .getElementById("loginTab")
-          .addEventListener("click", function () {
-            switchTab("login");
-          });
-
-        document
-          .getElementById("registerTab")
-          .addEventListener("click", function () {
-            switchTab("register");
-          });
-
-        function showError(message) {
-          console.error("Error:", message);
-          const errorDiv = document.getElementById("errorMessage");
-          errorDiv.textContent = message;
-          errorDiv.style.display = "block";
-          setTimeout(function () {
-            errorDiv.style.display = "none";
-          }, 5000);
-        }
-
-        function showSuccess(message) {
-          console.log("Success:", message);
-          const successDiv = document.getElementById("successMessage");
-          successDiv.textContent = message;
-          successDiv.style.display = "block";
-          setTimeout(function () {
-            successDiv.style.display = "none";
-          }, 5000);
-        }
-
-        function clearMessages() {
-          document.getElementById("errorMessage").style.display = "none";
-          document.getElementById("successMessage").style.display = "none";
-        }
-
-        // Регистрация
-        document
-          .getElementById("registerForm")
-          .addEventListener("submit", async function (event) {
-            event.preventDefault();
-            clearMessages();
-            console.log("Register form submitted");
-
-            const name = document.getElementById("registerName").value;
-            const email = document.getElementById("registerEmail").value;
-            const password = document.getElementById("registerPassword").value;
-
-            console.log("Registration data:", {
-              name: name,
-              email: email,
-              password: "***",
-            });
-
-            try {
-              const response = await fetch(`${API_URL}/auth/register.php`, {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                  name: name,
-                  email: email,
-                  password: password,
-                }),
-              });
-
-              console.log("Register response status:", response.status);
-              const data = await response.json();
-              console.log("Register response data:", data);
-
-              if (response.ok && data.success) {
-                showSuccess("Регистрация успешна! Теперь войдите в систему.");
-                setTimeout(function () {
-                  switchTab("login");
-                  document.getElementById("loginEmail").value = email;
-                }, 2000);
-              } else {
-                showError(data.message || "Ошибка регистрации");
-              }
-            } catch (error) {
-              console.error("Registration error:", error);
-              showError("Ошибка сервера. Проверьте подключение.");
-            }
-          });
-
-        // Вход
-        document
-          .getElementById("loginForm")
-          .addEventListener("submit", async function (event) {
-            event.preventDefault();
-            clearMessages();
-            console.log("Login form submitted");
-
-            const email = document.getElementById("loginEmail").value;
-            const password = document.getElementById("loginPassword").value;
-
-            console.log("Login data:", { email: email, password: "***" });
-
-            try {
-              const response = await fetch(`${API_URL}/auth/login.php`, {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                credentials: "include",
-                body: JSON.stringify({ email: email, password: password }),
-              });
-
-              console.log("Login response status:", response.status);
-              const data = await response.json();
-              console.log("Login response data:", data);
-
-              if (response.ok && data.success && data.token) {
-                console.log("Login successful, saving token");
-                localStorage.setItem("token", data.token);
-                showSuccess("Вход выполнен успешно!");
-
-                setTimeout(function () {
-                  console.log("Redirecting to home...");
-                  window.location.href = "/index.html";
-                }, 1000);
-              } else {
-                if (data.devices && data.devices.length > 0) {
-                  let message = data.message + "\n\nВаши устройства:\n";
-                  data.devices.forEach(function (device, index) {
-                    const lastUsed = new Date(device.lastUsed).toLocaleString(
-                      "ru-RU"
-                    );
-                    message +=
-                      index + 1 + ". " + device.name + " (" + lastUsed + ")\n";
-                  });
-                  showError(message);
-                } else {
-                  showError(data.message || "Ошибка входа");
-                }
-              }
-            } catch (error) {
-              console.error("Login error:", error);
-              showError(
-                "Ошибка сервера. Проверьте подключение и убедитесь что PHP backend работает."
-              );
-            }
-          });
-      })();
-    </script>
+    <script src="global/scripts/login.js"></script>
   </body>
 </html>

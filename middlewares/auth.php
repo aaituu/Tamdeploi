@@ -22,7 +22,7 @@ class AuthMiddleware {
             
             // Verify user exists
             $db = Database::getInstance()->getConnection();
-            $stmt = $db->prepare("SELECT id, email, name FROM users WHERE id = ?");
+            $stmt = $db->prepare("SELECT id, email, name, role FROM users WHERE id = ?");
             $stmt->execute([$payload['userId']]);
             $user = $stmt->fetch();
             

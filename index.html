@@ -142,7 +142,7 @@
       <h2>❌ Ошибка загрузки</h2>
       <p id="errorMessage"></p>
       <button
-        onclick="window.location.href='/auth.html'"
+        id="goToAuthBtn"
         style="
           margin-top: 20px;
           padding: 10px 20px;
@@ -168,7 +168,8 @@
         <section class="game-grid">
           <div
             class="game-card"
-            onclick="window.trackAndNavigate('names-from-pictures', 'games/names-from-pictures/')"
+            data-game="names-from-pictures"
+            data-url="games/names-from-pictures/"
           >
             <h2>🖼️ Имена по картинкам</h2>
             <p>
@@ -179,7 +180,8 @@
 
           <div
             class="game-card"
-            onclick="window.trackAndNavigate('photo-relay', 'games/photo-relay/')"
+            data-game="photo-relay"
+            data-url="games/photo-relay/"
           >
             <h2>📸 Фото-эстафета</h2>
             <p>Командная игра: сделайте фото по заданной теме</p>
@@ -188,7 +190,8 @@
 
           <div
             class="game-card"
-            onclick="window.trackAndNavigate('grandparents-vs-youth', 'games/grandparents-vs-youth/')"
+            data-game="grandparents-vs-youth"
+            data-url="games/grandparents-vs-youth/"
           >
             <h2>👵 Поколения</h2>
             <p>Молодёжь против бабушек и дедушек: угадайте предметы</p>
@@ -197,7 +200,8 @@
 
           <div
             class="game-card"
-            onclick="window.trackAndNavigate('bring-item', 'games/bring-item/')"
+            data-game="bring-item"
+            data-url="games/bring-item/"
           >
             <h2>🏃 Принеси предмет</h2>
             <p>Игра на выбывание: найдите нужный предмет в зале</p>
@@ -206,7 +210,8 @@
 
           <div
             class="game-card"
-            onclick="window.trackAndNavigate('random-letter', 'games/random-letter/')"
+            data-game="random-letter"
+            data-url="games/random-letter/"
           >
             <h2>🎵 Песня на букву</h2>
             <p>Спойте песню, начинающуюся на случайную букву</p>
@@ -217,168 +222,6 @@
     </div>
 
     <script src="global/scripts/auth.js"></script>
-    <script>
-      (function () {
-        "use strict";
-
-        // Получаем API_URL из глобального хелпера
-        const API_URL = window.authHelpers.API_URL;
-        console.log("Index page loaded, API_URL:", API_URL);
-
-        function showError(message, details) {
-          console.error("Error:", message, details);
-          document.getElementById("loading").style.display = "none";
-          document.getElementById("errorScreen").style.display = "flex";
-          document.getElementById("errorMessage").textContent = message;
-
-          if (details) {
-            document.getElementById("errorDetails").style.display = "block";
-            document.getElementById("errorDetails").textContent =
-              JSON.stringify(details, null, 2);
-          }
-        }
-
-        // Трекинг посещения игры
-        async function trackGameVisit(gameName) {
-          const token =
-            localStorage.getItem("token") || sessionStorage.getItem("token");
-          if (!token) return;
-
-          try {
-            await fetch(`${API_URL}/user/track-game.php`, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-              },
-              credentials: "include",
-              body: JSON.stringify({ gameName: gameName }),
-            });
-          } catch (error) {
-            console.error("Tracking error:", error);
-          }
-        }
-
-        // Комбинированная функция
-        function trackAndNavigate(gameName, url) {
-          trackGameVisit(gameName);
-          window.location.href = url;
-        }
-
-        // Экспортируем в window
-        window.trackAndNavigate = trackAndNavigate;
-
-        // Проверка авторизации при загрузке
-        window.addEventListener("DOMContentLoaded", async function () {
-          console.log("Window loaded, checking authentication...");
-
-          const token =
-            localStorage.getItem("token") || sessionStorage.getItem("token");
-          console.log("Token found:", !!token);
-
-          if (!token) {
-            console.log("No token, redirecting to auth");
-            window.location.replace("/auth.html");
-            return;
-          }
-
-          try {
-            console.log("Step 1: Verifying token...");
-            const verifyResponse = await fetch(`${API_URL}/auth/verify.php`, {
-              method: "GET",
-              headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-              },
-              credentials: "include",
-            });
-
-            console.log("Verify response status:", verifyResponse.status);
-
-            if (!verifyResponse.ok) {
-              console.log(
-                "Token verification failed, status:",
-                verifyResponse.status
-              );
-              localStorage.removeItem("token");
-              sessionStorage.removeItem("token");
-              window.location.replace("/auth.html");
-              return;
-            }
-
-            const verifyData = await verifyResponse.json();
-            console.log("Verify response data:", verifyData);
-
-            if (!verifyData.success) {
-              console.log("Token not valid");
-              localStorage.removeItem("token");
-              sessionStorage.removeItem("token");
-              window.location.replace("/auth.html");
-              return;
-            }
-
-            console.log("Step 2: Loading profile...");
-            const profileResponse = await fetch(`${API_URL}/user/profile.php`, {
-              method: "GET",
-              headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-              },
-              credentials: "include",
-            });
-
-            console.log("Profile response status:", profileResponse.status);
-
-            if (!profileResponse.ok) {
-              console.log("Profile load failed");
-              localStorage.removeItem("token");
-              sessionStorage.removeItem("token");
-              window.location.replace("/auth.html");
-              return;
-            }
-
-            const profileData = await profileResponse.json();
-            console.log("Profile data:", profileData);
-
-            if (profileData.success && profileData.user) {
-              const user = profileData.user;
-              console.log("User loaded:", user.email);
-
-              document.getElementById("profileBtn").textContent = `👤 ${
-                user.name || user.email
-              }`;
-              document.getElementById(
-                "welcomeText"
-              ).textContent = `Добро пожаловать, ${user.name || user.email}!`;
-
-              console.log("Showing main content");
-              document.getElementById("loading").style.display = "none";
-              document.getElementById("mainContent").style.display = "block";
-            } else {
-              console.log("Invalid profile data");
-              showError("Не удалось загрузить профиль", profileData);
-              localStorage.removeItem("token");
-              sessionStorage.removeItem("token");
-              setTimeout(function () {
-                window.location.replace("/auth.html");
-              }, 3000);
-            }
-          } catch (error) {
-            console.error("Error during page load:", error);
-            showError(
-              "Ошибка подключения к серверу. Убедитесь что PHP backend работает.",
-              { error: error.message, stack: error.stack }
-            );
-
-            localStorage.removeItem("token");
-            sessionStorage.removeItem("token");
-
-            setTimeout(function () {
-              window.location.replace("/auth.html");
-            }, 5000);
-          }
-        });
-      })();
-    </script>
+    <script src="global/scripts/index.js"></script>
   </body>
 </html>

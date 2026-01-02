@@ -19,7 +19,7 @@ try {
     
     // Get user with devices
     $stmt = $db->prepare("
-        SELECT id, email, name, gameStats, createdAt 
+        SELECT id, email, name, role, gameStats, createdAt 
         FROM users 
         WHERE id = ?
     ");
@@ -52,6 +52,7 @@ try {
             'id' => $user['id'],
             'email' => $user['email'],
             'name' => $user['name'],
+            'role' => $user['role'] ?? 'user',
             'gameStats' => $gameStats,
             'createdAt' => $user['createdAt'],
             'devices' => $devices

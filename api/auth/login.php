@@ -26,7 +26,7 @@ try {
     
     // Find user by email
     $stmt = $db->prepare("
-        SELECT id, email, name, password, createdAt 
+        SELECT id, email, name, password, role, createdAt 
         FROM users 
         WHERE email = ?
     ");
@@ -142,7 +142,8 @@ try {
         'user' => [
             'id' => $user['id'],
             'email' => $user['email'],
-            'name' => $user['name']
+            'name' => $user['name'],
+            'role' => $user['role'] ?? 'user'
         ],
         'device' => $device
     ]);
