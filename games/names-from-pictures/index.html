@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Имена по картинкам</title>
+    <link rel="stylesheet" href="../../global/styles/main.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <a href="../../index.html" class="btn-home">🏠 На главную</a>
+    
+    <div class="container">
+        <h1>🖼️ Имена мест Казахстана по картинкам</h1>
+        
+        <div class="instructions card fade-in">
+            <h3>📋 Инструкция для ведущего:</h3>
+            <p>1. Показывайте участникам две картинки-подсказки</p>
+            <p>2. Участники должны угадать название места в Казахстане</p>
+            <p>3. Нажимайте "Показать ответ" когда время истекло</p>
+            <p>4. Используйте кнопки навигации для переключения между загадками</p>
+        </div>
+
+        <div class="game-content card">
+            <div class="puzzle-counter">
+                Загадка <span id="currentPuzzle">1</span> из <span id="totalPuzzles">7</span>
+            </div>
+
+            <div class="images-container">
+                <div class="image-box">
+                    <div class="image-placeholder" id="image1">
+                        <span id="hint1"></span>
+                    </div>
+                </div>
+                <div class="plus-sign">+</div>
+                <div class="image-box">
+                    <div class="image-placeholder" id="image2">
+                        <span id="hint2"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="answer-section" id="answerSection">
+                <div class="answer-box hidden" id="answerBox">
+                    <h2>Ответ:</h2>
+                    <div class="answer-text" id="answerText"></div>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button class="btn btn-secondary" id="prevBtn" onclick="previousPuzzle()">← Предыдущая</button>
+                <button class="btn btn-primary" id="showAnswerBtn" onclick="toggleAnswer()">Показать ответ</button>
+                <button class="btn btn-secondary" id="nextBtn" onclick="nextPuzzle()">Следующая →</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

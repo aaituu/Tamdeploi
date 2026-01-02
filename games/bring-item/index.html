@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Принеси предмет</title>
+    <link rel="stylesheet" href="../../global/styles/main.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <a href="../../index.html" class="btn-home">🏠 На главную</a>
+    
+    <div class="container">
+        <h1>🏃 Игра "Принеси предмет из зала"</h1>
+        
+        <div class="instructions card fade-in">
+            <h3>📋 Инструкция для ведущего:</h3>
+            <p>1. Начинают 6 игроков, но только 5 стульев</p>
+            <p>2. Читайте задание и засекайте время (например, 30-60 секунд)</p>
+            <p>3. Игроки должны найти и принести нужный предмет или человека</p>
+            <p>4. Кто не успел занять стул с предметом — выбывает</p>
+            <p>5. В следующем раунде убирается один стул</p>
+            <p>6. Игра продолжается до победителя</p>
+        </div>
+
+        <div class="game-content card">
+            <div class="game-status">
+                <div class="status-item">
+                    <span class="status-label">Раунд:</span>
+                    <span class="status-value" id="currentRound">1</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">Игроков:</span>
+                    <span class="status-value" id="playersCount">6</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">Стульев:</span>
+                    <span class="status-value" id="chairsCount">5</span>
+                </div>
+            </div>
+
+            <div class="task-display" id="taskDisplay">
+                <div class="task-placeholder">
+                    <h2>Нажмите "Начать игру" чтобы увидеть первое задание</h2>
+                </div>
+            </div>
+
+            <div class="task-box hidden" id="taskBox">
+                <div class="task-number">Задание <span id="taskNumber">1</span></div>
+                <div class="task-icon" id="taskIcon">🎯</div>
+                <div class="task-text" id="taskText"></div>
+            </div>
+
+            <div class="timer-section">
+                <div class="timer-display" id="timerDisplay">
+                    <div class="timer-label">Время:</div>
+                    <div class="timer-value" id="timerValue">60</div>
+                    <div class="timer-label">сек</div>
+                </div>
+                <div class="timer-controls">
+                    <button class="btn btn-success" id="startTimerBtn" onclick="startTimer()" disabled>
+                        ⏱️ Запустить таймер
+                    </button>
+                    <button class="btn btn-secondary" id="resetTimerBtn" onclick="resetTimer()">
+                        🔄 Сбросить таймер
+                    </button>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button class="btn btn-primary btn-large" id="startGameBtn" onclick="startGame()">
+                    ▶️ Начать игру
+                </button>
+                <button class="btn btn-secondary hidden" id="nextTaskBtn" onclick="nextTask()">
+                    ➡️ Следующее задание
+                </button>
+                <button class="btn btn-secondary hidden" id="eliminatePlayerBtn" onclick="eliminatePlayer()">
+                    ❌ Игрок выбыл
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

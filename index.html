@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Игры для мероприятия - Tamada Games</title>
+    <link rel="stylesheet" href="global/styles/main.css" />
+    <style>
+      .game-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+        padding: 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .game-card {
+        background: white;
+        border-radius: 12px;
+        padding: 24px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s, box-shadow 0.3s;
+        cursor: pointer;
+      }
+
+      .game-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      .game-card h2 {
+        color: #2c3e50;
+        margin-bottom: 12px;
+        font-size: 1.4em;
+      }
+
+      .game-card p {
+        color: #7f8c8d;
+        line-height: 1.6;
+        margin-bottom: 16px;
+      }
+
+      .game-card .btn {
+        width: 100%;
+        padding: 12px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 1.1em;
+        cursor: pointer;
+        transition: opacity 0.3s;
+      }
+
+      .game-card .btn:hover {
+        opacity: 0.9;
+      }
+
+      .header {
+        text-align: center;
+        padding: 40px 20px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        position: relative;
+      }
+
+      .header h1 {
+        margin: 0;
+        font-size: 2.5em;
+        color: white;
+      }
+
+      .header p {
+        margin: 10px 0 0;
+        opacity: 0.9;
+      }
+
+      .profile-btn {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 25px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+      }
+
+      .profile-btn:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: scale(1.05);
+      }
+
+      .loading {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        font-size: 1.5em;
+        color: #667eea;
+      }
+
+      .error-screen {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 20px;
+        text-align: center;
+      }
+
+      .error-screen h2 {
+        color: #e74c3c;
+        margin-bottom: 20px;
+      }
+
+      .error-screen pre {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 10px;
+        text-align: left;
+        overflow-x: auto;
+        max-width: 600px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="loading" class="loading">
+      <div>⏳ Загрузка...</div>
+      <div style="font-size: 0.8em; margin-top: 10px; color: #95a5a6">
+        Проверка авторизации
+      </div>
+    </div>
+
+    <div id="errorScreen" class="error-screen" style="display: none">
+      <h2>❌ Ошибка загрузки</h2>
+      <p id="errorMessage"></p>
+      <button
+        onclick="window.location.href='/auth.html'"
+        style="
+          margin-top: 20px;
+          padding: 10px 20px;
+          font-size: 1em;
+          cursor: pointer;
+        "
+      >
+        Перейти к авторизации
+      </button>
+      <pre id="errorDetails" style="display: none"></pre>
+    </div>
+
+    <div id="mainContent" style="display: none">
+      <div class="header">
+        <a href="profile.html" class="profile-btn" id="profileBtn"
+          >👤 Профиль</a
+        >
+        <h1>🎮 Игры для мероприятия</h1>
+        <p id="welcomeText">Выберите игру для начала</p>
+      </div>
+
+      <main style="max-width: 1200px; margin: 20px auto; padding: 0 16px">
+        <section class="game-grid">
+          <div
+            class="game-card"
+            onclick="trackGameVisit('names-from-pictures'); window.location.href='games/names-from-pictures/'"
+          >
+            <h2>🖼️ Имена по картинкам</h2>
+            <p>
+              Угадайте названия мест Казахстана по двум картинкам-подсказкам
+            </p>
+            <button class="btn">Начать игру</button>
+          </div>
+
+          <div
+            class="game-card"
+            onclick="trackGameVisit('photo-relay'); window.location.href='games/photo-relay/'"
+          >
+            <h2>📸 Фото-эстафета</h2>
+            <p>Командная игра: сделайте фото по заданной теме</p>
+            <button class="btn">Начать игру</button>
+          </div>
+
+          <div
+            class="game-card"
+            onclick="trackGameVisit('grandparents-vs-youth'); window.location.href='games/grandparents-vs-youth/'"
+          >
+            <h2>👵 Поколения</h2>
+            <p>Молодёжь против бабушек и дедушек: угадайте предметы</p>
+            <button class="btn">Начать игру</button>
+          </div>
+
+          <div
+            class="game-card"
+            onclick="trackGameVisit('bring-item'); window.location.href='games/bring-item/'"
+          >
+            <h2>🏃 Принеси предмет</h2>
+            <p>Игра на выбывание: найдите нужный предмет в зале</p>
+            <button class="btn">Начать игру</button>
+          </div>
+
+          <div
+            class="game-card"
+            onclick="trackGameVisit('random-letter'); window.location.href='games/random-letter/'"
+          >
+            <h2>🎵 Песня на букву</h2>
+            <p>Спойте песню, начинающуюся на случайную букву</p>
+            <button class="btn">Начать игру</button>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="global/scripts/auth.js"></script>
+    <script>
+      const API_URL = "/api";
+      console.log("Index page loaded, API_URL:", API_URL);
+
+      function showError(message, details = null) {
+        console.error("Error:", message, details);
+        document.getElementById("loading").style.display = "none";
+        document.getElementById("errorScreen").style.display = "flex";
+        document.getElementById("errorMessage").textContent = message;
+
+        if (details) {
+          document.getElementById("errorDetails").style.display = "block";
+          document.getElementById("errorDetails").textContent = JSON.stringify(
+            details,
+            null,
+            2
+          );
+        }
+      }
+
+      window.onload = async () => {
+        console.log("Window loaded, checking authentication...");
+
+        const token =
+          localStorage.getItem("token") || sessionStorage.getItem("token");
+        console.log("Token found:", !!token);
+
+        if (!token) {
+          console.log("No token, redirecting to auth");
+          window.location.replace("/auth.html");
+          return;
+        }
+
+        try {
+          console.log("Step 1: Verifying token...");
+          const verifyResponse = await fetch(`${API_URL}/auth/verify.php`, {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+          });
+
+          console.log("Verify response status:", verifyResponse.status);
+
+          if (!verifyResponse.ok) {
+            console.log(
+              "Token verification failed, status:",
+              verifyResponse.status
+            );
+            localStorage.removeItem("token");
+            sessionStorage.removeItem("token");
+            window.location.replace("/auth.html");
+            return;
+          }
+
+          const verifyData = await verifyResponse.json();
+          console.log("Verify response data:", verifyData);
+
+          if (!verifyData.success) {
+            console.log("Token not valid");
+            localStorage.removeItem("token");
+            sessionStorage.removeItem("token");
+            window.location.replace("/auth.html");
+            return;
+          }
+
+          console.log("Step 2: Loading profile...");
+          const profileResponse = await fetch(`${API_URL}/user/profile.php`, {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+          });
+
+          console.log("Profile response status:", profileResponse.status);
+
+          if (!profileResponse.ok) {
+            console.log("Profile load failed");
+            localStorage.removeItem("token");
+            sessionStorage.removeItem("token");
+            window.location.replace("/auth.html");
+            return;
+          }
+
+          const profileData = await profileResponse.json();
+          console.log("Profile data:", profileData);
+
+          if (profileData.success && profileData.user) {
+            const user = profileData.user;
+            console.log("User loaded:", user.email);
+
+            document.getElementById("profileBtn").textContent = `👤 ${
+              user.name || user.email
+            }`;
+            document.getElementById(
+              "welcomeText"
+            ).textContent = `Добро пожаловать, ${user.name || user.email}!`;
+
+            console.log("Showing main content");
+            document.getElementById("loading").style.display = "none";
+            document.getElementById("mainContent").style.display = "block";
+          } else {
+            console.log("Invalid profile data");
+            showError("Не удалось загрузить профиль", profileData);
+            localStorage.removeItem("token");
+            sessionStorage.removeItem("token");
+            setTimeout(() => {
+              window.location.replace("/auth.html");
+            }, 3000);
+          }
+        } catch (error) {
+          console.error("Error during page load:", error);
+          showError(
+            "Ошибка подключения к серверу. Убедитесь что PHP backend работает.",
+            { error: error.message, stack: error.stack }
+          );
+
+          localStorage.removeItem("token");
+          sessionStorage.removeItem("token");
+
+          setTimeout(() => {
+            window.location.replace("/auth.html");
+          }, 5000);
+        }
+      };
+
+      async function trackGameVisit(gameName) {
+        const token =
+          localStorage.getItem("token") || sessionStorage.getItem("token");
+        if (!token) return;
+
+        try {
+          await fetch(`${API_URL}/user/track-game.php`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            credentials: "include",
+            body: JSON.stringify({ gameName }),
+          });
+        } catch (error) {
+          console.error("Tracking error:", error);
+        }
+      }
+    </script>
+  </body>
+</html>

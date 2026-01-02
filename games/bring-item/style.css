@@ -1,0 +1,207 @@
+.game-content {
+    text-align: center;
+}
+
+.game-status {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+}
+
+.status-item {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 20px 30px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+}
+
+.status-label {
+    display: block;
+    color: rgba(255,255,255,0.9);
+    font-size: 0.9em;
+    margin-bottom: 5px;
+}
+
+.status-value {
+    display: block;
+    color: white;
+    font-size: 2.5em;
+    font-weight: bold;
+}
+
+.task-display {
+    min-height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 30px 0;
+}
+
+.task-placeholder {
+    color: #95a5a6;
+    font-size: 1.2em;
+}
+
+.task-box {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    padding: 50px;
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(240, 147, 251, 0.4);
+    animation: bounceIn 0.6s ease-out;
+}
+
+.task-number {
+    font-size: 1.2em;
+    color: rgba(255,255,255,0.9);
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.task-icon {
+    font-size: 5em;
+    margin-bottom: 20px;
+}
+
+.task-text {
+    font-size: 2.2em;
+    color: white;
+    font-weight: bold;
+    line-height: 1.4;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+}
+
+.timer-section {
+    margin: 40px 0;
+    background: #ecf0f1;
+    padding: 30px;
+    border-radius: 15px;
+}
+
+.timer-display {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.timer-label {
+    font-size: 1.5em;
+    color: #34495e;
+    font-weight: 600;
+}
+
+.timer-value {
+    font-size: 4em;
+    color: #e74c3c;
+    font-weight: bold;
+    font-family: 'Courier New', monospace;
+    background: white;
+    padding: 10px 30px;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+.timer-value.warning {
+    animation: pulse 1s ease-in-out infinite;
+}
+
+.timer-controls {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 30px;
+    flex-wrap: wrap;
+}
+
+.btn-large {
+    font-size: 1.4em;
+    padding: 20px 40px;
+}
+
+@keyframes bounceIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+        color: #c0392b;
+    }
+}
+
+@media (max-width: 768px) {
+    .game-status {
+        gap: 15px;
+    }
+    
+    .status-item {
+        padding: 15px 20px;
+        flex: 1 1 calc(50% - 15px);
+        min-width: 120px;
+    }
+    
+    .status-value {
+        font-size: 2em;
+    }
+    
+    .task-box {
+        padding: 30px 20px;
+    }
+    
+    .task-icon {
+        font-size: 3em;
+    }
+    
+    .task-text {
+        font-size: 1.6em;
+    }
+    
+    .timer-value {
+        font-size: 3em;
+        padding: 10px 20px;
+    }
+    
+    .timer-controls {
+        flex-direction: column;
+    }
+    
+    .timer-controls button {
+        width: 100%;
+    }
+    
+    .btn-large {
+        font-size: 1.2em;
+        padding: 15px 30px;
+    }
+    
+    .controls {
+        flex-direction: column;
+    }
+    
+    .controls button {
+        width: 100%;
+    }
+}

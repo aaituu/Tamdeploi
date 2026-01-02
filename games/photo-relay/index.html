@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Фото-эстафета</title>
+    <link rel="stylesheet" href="../../global/styles/main.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <a href="../../index.html" class="btn-home">🏠 На главную</a>
+    
+    <div class="container">
+        <h1>📸 Фото-эстафета</h1>
+        
+        <div class="instructions card fade-in">
+            <h3>📋 Инструкция для ведущего:</h3>
+            <p>1. Разделите участников на команды (оптимально 3-5 команд)</p>
+            <p>2. Нажмите "Новое задание" чтобы показать тему для фото</p>
+            <p>3. Команды должны сделать фото по заданной теме и принести вам</p>
+            <p>4. Оцените креативность и скорость выполнения</p>
+            <p>5. Команда, которая быстрее и креативнее выполнит задание, получает очки</p>
+        </div>
+
+        <div class="game-content card">
+            <div class="task-counter">
+                Задание <span id="currentTask">0</span> из <span id="totalTasks">12</span>
+            </div>
+
+            <div class="task-display" id="taskDisplay">
+                <div class="task-placeholder">
+                    <p>Нажмите кнопку ниже, чтобы начать игру</p>
+                </div>
+            </div>
+
+            <div class="task-box hidden" id="taskBox">
+                <div class="task-icon">📸</div>
+                <div class="task-text" id="taskText"></div>
+            </div>
+
+            <div class="controls">
+                <button class="btn btn-primary btn-large" id="newTaskBtn" onclick="getNewTask()">
+                    🎲 Новое задание
+                </button>
+                <button class="btn btn-secondary" id="resetBtn" onclick="resetGame()">
+                    🔄 Начать сначала
+                </button>
+            </div>
+
+            <div class="completed-tasks" id="completedTasks">
+                <h3>✅ Выполненные задания:</h3>
+                <ul id="tasksList"></ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Поколения</title>
+    <link rel="stylesheet" href="../../global/styles/main.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <a href="../../index.html" class="btn-home">🏠 На главную</a>
+    
+    <div class="container">
+        <h1>👵 Молодёжь vs Бабушки и Дедушки</h1>
+        
+        <div class="instructions card fade-in">
+            <h3>📋 Инструкция для ведущего:</h3>
+            <p>1. Выберите режим игры: "Молодёжь угадывает" или "Старшее поколение угадывает"</p>
+            <p>2. Показывайте участникам изображения предметов</p>
+            <p>3. Участники должны угадать название или назначение предмета</p>
+            <p>4. За каждый правильный ответ команда получает балл</p>
+        </div>
+
+        <div class="game-content card">
+            <div class="mode-selector">
+                <button class="btn btn-primary mode-btn active" onclick="selectMode('youth')">
+                    👶 Молодёжь угадывает
+                </button>
+                <button class="btn btn-secondary mode-btn" onclick="selectMode('elders')">
+                    👴 Старшее поколение угадывает
+                </button>
+            </div>
+
+            <div class="item-counter">
+                Предмет <span id="currentItem">1</span> из <span id="totalItems">10</span>
+            </div>
+
+            <div class="item-display">
+                <div class="item-box" id="itemBox">
+                    <div class="item-icon" id="itemIcon">🎯</div>
+                    <div class="item-name" id="itemName">Выберите режим и нажмите "Начать"</div>
+                </div>
+            </div>
+
+            <div class="answer-section hidden" id="answerSection">
+                <div class="answer-box">
+                    <h3>Ответ:</h3>
+                    <div class="answer-text" id="answerText"></div>
+                    <div class="answer-description" id="answerDescription"></div>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button class="btn btn-success btn-large" id="startBtn" onclick="startGame()">
+                    ▶️ Начать игру
+                </button>
+                <button class="btn btn-primary hidden" id="showAnswerBtn" onclick="toggleAnswer()">
+                    👁️ Показать ответ
+                </button>
+                <button class="btn btn-secondary hidden" id="nextBtn" onclick="nextItem()">
+                    ➡️ Следующий предмет
+                </button>
+            </div>
+
+            <div class="score-board">
+                <div class="score-item">
+                    <span class="score-label">Правильных ответов:</span>
+                    <span class="score-value" id="correctScore">0</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Песня на букву</title>
+    <link rel="stylesheet" href="../../global/styles/main.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <a href="../../index.html" class="btn-home">🏠 На главную</a>
+    
+    <div class="container">
+        <h1>🎵 Спой песню на букву</h1>
+        
+        <div class="instructions card fade-in">
+            <h3>📋 Инструкция для ведущего:</h3>
+            <p>1. Нажмите "Выбрать букву" для генерации случайной буквы</p>
+            <p>2. Участники должны спеть песню, которая начинается на эту букву</p>
+            <p>3. Можно играть индивидуально или командами</p>
+            <p>4. За каждую правильную песню команда получает балл</p>
+            <p>5. Повторяющиеся песни не засчитываются</p>
+        </div>
+
+        <div class="game-content card">
+            <div class="letter-display" id="letterDisplay">
+                <div class="letter-placeholder">
+                    <h2>Нажмите кнопку ниже<br>чтобы выбрать букву</h2>
+                </div>
+            </div>
+
+            <div class="letter-box hidden" id="letterBox">
+                <div class="letter-icon">🎤</div>
+                <div class="letter-text" id="letterText">А</div>
+                <div class="letter-hint">Спойте песню на эту букву!</div>
+            </div>
+
+            <div class="controls">
+                <button class="btn btn-primary btn-huge" onclick="generateLetter()">
+                    🎲 Выбрать букву
+                </button>
+            </div>
+
+            <div class="history-section" id="historySection">
+                <h3>📝 История выбранных букв:</h3>
+                <div class="letters-history" id="lettersHistory"></div>
+            </div>
+
+            <div class="stats-section">
+                <div class="stat-box">
+                    <div class="stat-label">Всего букв выбрано:</div>
+                    <div class="stat-value" id="totalLetters">0</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

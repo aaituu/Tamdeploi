@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Профиль</title>
+    <link rel="stylesheet" href="global/styles/main.css" />
+    <style>
+      body {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+
+      .profile-container {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        max-width: 600px;
+        width: 100%;
+        padding: 40px;
+        animation: slideIn 0.5s ease-out;
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateY(-30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .profile-header {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .profile-header h1 {
+        color: #667eea;
+        font-size: 2em;
+        margin-bottom: 10px;
+      }
+
+      .user-info {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 15px;
+        margin-bottom: 30px;
+      }
+
+      .user-info p {
+        color: #34495e;
+        margin-bottom: 10px;
+        font-size: 1.1em;
+      }
+
+      .user-info strong {
+        color: #667eea;
+      }
+
+      .stats-section {
+        margin-bottom: 30px;
+      }
+
+      .stats-section h2 {
+        color: #34495e;
+        margin-bottom: 20px;
+        font-size: 1.5em;
+      }
+
+      .game-stat {
+        background: #ecf0f1;
+        padding: 15px 20px;
+        border-radius: 10px;
+        margin-bottom: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .game-stat-name {
+        color: #2c3e50;
+        font-weight: 600;
+        font-size: 1.1em;
+      }
+
+      .game-stat-count {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 8px 15px;
+        border-radius: 20px;
+        font-weight: bold;
+        font-size: 1.1em;
+      }
+
+      .no-stats {
+        text-align: center;
+        color: #7f8c8d;
+        padding: 30px;
+        font-size: 1.1em;
+      }
+
+      .btn-container {
+        display: flex;
+        gap: 15px;
+        flex-direction: column;
+      }
+
+      .btn-back {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        color: white;
+        padding: 15px;
+        border: none;
+        border-radius: 10px;
+        font-size: 1.1em;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.3s;
+      }
+
+      .btn-back:hover {
+        transform: translateY(-2px);
+      }
+
+      .btn-logout {
+        background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+        color: white;
+        padding: 15px;
+        border: none;
+        border-radius: 10px;
+        font-size: 1.1em;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.3s;
+      }
+
+      .btn-logout:hover {
+        transform: translateY(-2px);
+      }
+
+      .loading {
+        text-align: center;
+        color: #667eea;
+        font-size: 1.2em;
+        padding: 40px;
+      }
+
+      @media (max-width: 768px) {
+        .profile-container {
+          padding: 25px;
+        }
+
+        .profile-header h1 {
+          font-size: 1.6em;
+        }
+
+        .game-stat {
+          flex-direction: column;
+          gap: 10px;
+          text-align: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="profile-container">
+      <div id="loadingSection" class="loading">
+        <p>Загрузка профиля...</p>
+      </div>
+
+      <div id="profileContent" style="display: none">
+        <div class="profile-header">
+          <h1>Профиль пользователя</h1>
+        </div>
+
+        <div class="user-info" id="userInfo">
+          <p><strong>Email:</strong> <span id="userEmail">Загрузка...</span></p>
+          <p><strong>Имя:</strong> <span id="userName">Загрузка...</span></p>
+          <p>
+            <strong>Зарегистрирован:</strong>
+            <span id="userCreated">Загрузка...</span>
+          </p>
+        </div>
+
+        <div class="stats-section">
+          <h2>Статистика посещений игр</h2>
+          <div id="gameStats">
+            <div class="no-stats">Загрузка статистики...</div>
+          </div>
+        </div>
+
+        <div class="btn-container">
+          <button class="btn-back" onclick="goBack()">
+            ← Вернуться к играм
+          </button>
+          <button class="btn-logout" onclick="handleLogout()">
+            Выйти из аккаунта
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="global/scripts/auth.js"></script>
+    <script>
+      // Определяем API URL из глобального хелпера
+      const API_URL = window.authHelpers ? window.authHelpers.API_URL : "/api";
+
+      const gameNames = {
+        "names-from-pictures": "🖼️ Имена по картинкам",
+        "photo-relay": "📸 Фото-эстафета",
+        "grandparents-vs-youth": "👵 Поколения",
+        "bring-item": "🏃 Принеси предмет",
+        "random-letter": "🎵 Песня на букву",
+      };
+
+      window.onload = async () => {
+        const token =
+          localStorage.getItem("token") || sessionStorage.getItem("token");
+
+        if (!token) {
+          window.location.href = "/auth.html";
+          return;
+        }
+
+        try {
+          const verifyResponse = await fetch(`${API_URL}/auth/verify`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            credentials: "include",
+          });
+
+          if (!verifyResponse.ok) {
+            localStorage.removeItem("token");
+            sessionStorage.removeItem("token");
+            window.location.href = "/auth.html";
+            return;
+          }
+
+          await loadProfile();
+        } catch (error) {
+          console.error("Ошибка проверки токена:", error);
+          localStorage.removeItem("token");
+          sessionStorage.removeItem("token");
+          window.location.href = "/auth.html";
+        }
+      };
+
+      async function loadProfile() {
+        const token =
+          localStorage.getItem("token") || sessionStorage.getItem("token");
+
+        try {
+          const response = await fetch(`${API_URL}/user/profile`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            credentials: "include",
+          });
+
+          if (!response.ok) {
+            throw new Error("Failed to load profile");
+          }
+
+          const data = await response.json();
+
+          if (!data.success || !data.user) {
+            throw new Error("Invalid profile data");
+          }
+
+          const user = data.user;
+
+          document.getElementById("userEmail").textContent = user.email;
+          document.getElementById("userName").textContent =
+            user.name || "Не указано";
+          document.getElementById("userCreated").textContent = new Date(
+            user.createdAt
+          ).toLocaleDateString("ru-RU");
+
+          displayGameStats(user.gameStats || {});
+
+          document.getElementById("loadingSection").style.display = "none";
+          document.getElementById("profileContent").style.display = "block";
+        } catch (error) {
+          console.error("Ошибка загрузки профиля:", error);
+          localStorage.removeItem("token");
+          sessionStorage.removeItem("token");
+          window.location.href = "/auth.html";
+        }
+      }
+
+      function displayGameStats(stats) {
+        const statsContainer = document.getElementById("gameStats");
+
+        if (!stats || Object.keys(stats).length === 0) {
+          statsContainer.innerHTML =
+            '<div class="no-stats">Вы еще не посещали игры</div>';
+          return;
+        }
+
+        const sortedStats = Object.entries(stats).sort((a, b) => b[1] - a[1]);
+
+        statsContainer.innerHTML = sortedStats
+          .map(
+            ([gameName, count]) => `
+            <div class="game-stat">
+                <div class="game-stat-name">${
+                  gameNames[gameName] || gameName
+                }</div>
+                <div class="game-stat-count">${count} ${getVisitWord(
+              count
+            )}</div>
+            </div>
+        `
+          )
+          .join("");
+      }
+
+      function getVisitWord(count) {
+        const lastDigit = count % 10;
+        const lastTwoDigits = count % 100;
+
+        if (lastTwoDigits >= 11 && lastTwoDigits <= 14) {
+          return "посещений";
+        }
+
+        if (lastDigit === 1) {
+          return "посещение";
+        }
+
+        if (lastDigit >= 2 && lastDigit <= 4) {
+          return "посещения";
+        }
+
+        return "посещений";
+      }
+
+      function goBack() {
+        window.location.href = "/";
+      }
+
+      async function handleLogout() {
+        if (!confirm("Вы уверены, что хотите выйти?")) {
+          return;
+        }
+
+        const token =
+          localStorage.getItem("token") || sessionStorage.getItem("token");
+
+        try {
+          await fetch(`${API_URL}/auth/logout`, {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            credentials: "include",
+          });
+        } catch (error) {
+          console.error("Ошибка выхода:", error);
+        }
+
+        localStorage.removeItem("token");
+        sessionStorage.removeItem("token");
+        window.location.href = "/auth.html";
+      }
+    </script>
+  </body>
+</html>

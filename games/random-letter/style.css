@@ -1,0 +1,206 @@
+.game-content {
+    text-align: center;
+}
+
+.letter-display {
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 40px 0;
+}
+
+.letter-placeholder {
+    color: #95a5a6;
+    font-size: 1.3em;
+}
+
+.letter-box {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 60px;
+    border-radius: 25px;
+    box-shadow: 0 20px 50px rgba(102, 126, 234, 0.5);
+    animation: letterReveal 0.8s ease-out;
+}
+
+.letter-icon {
+    font-size: 4em;
+    margin-bottom: 20px;
+    animation: swing 2s ease-in-out infinite;
+}
+
+.letter-text {
+    font-size: 12em;
+    color: white;
+    font-weight: bold;
+    font-family: 'Arial Black', sans-serif;
+    text-shadow: 5px 5px 10px rgba(0,0,0,0.3);
+    line-height: 1;
+    margin: 20px 0;
+    animation: glow 2s ease-in-out infinite;
+}
+
+.letter-hint {
+    font-size: 1.8em;
+    color: rgba(255,255,255,0.95);
+    font-weight: 600;
+    margin-top: 20px;
+}
+
+.controls {
+    margin: 40px 0;
+}
+
+.btn-huge {
+    font-size: 1.8em;
+    padding: 25px 60px;
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+}
+
+.btn-huge:active {
+    transform: scale(0.95);
+}
+
+.history-section {
+    margin-top: 50px;
+    text-align: left;
+    background: #ecf0f1;
+    padding: 30px;
+    border-radius: 15px;
+}
+
+.history-section h3 {
+    color: #34495e;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.letters-history {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+}
+
+.history-letter {
+    background: white;
+    width: 70px;
+    height: 70px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5em;
+    font-weight: bold;
+    color: #667eea;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    transition: transform 0.3s;
+    animation: popIn 0.4s ease-out;
+}
+
+.history-letter:hover {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.stats-section {
+    margin-top: 30px;
+}
+
+.stat-box {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    padding: 25px;
+    border-radius: 15px;
+    display: inline-block;
+}
+
+.stat-label {
+    color: white;
+    font-size: 1.2em;
+    margin-bottom: 10px;
+    opacity: 0.95;
+}
+
+.stat-value {
+    color: white;
+    font-size: 3em;
+    font-weight: bold;
+}
+
+@keyframes letterReveal {
+    0% {
+        opacity: 0;
+        transform: scale(0.5) rotate(-180deg);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) rotate(0);
+    }
+}
+
+@keyframes swing {
+    0%, 100% {
+        transform: rotate(0deg);
+    }
+    25% {
+        transform: rotate(10deg);
+    }
+    75% {
+        transform: rotate(-10deg);
+    }
+}
+
+@keyframes glow {
+    0%, 100% {
+        text-shadow: 5px 5px 10px rgba(0,0,0,0.3),
+                     0 0 20px rgba(255,255,255,0.5);
+    }
+    50% {
+        text-shadow: 5px 5px 10px rgba(0,0,0,0.3),
+                     0 0 40px rgba(255,255,255,0.8),
+                     0 0 60px rgba(255,255,255,0.6);
+    }
+}
+
+@keyframes popIn {
+    0% {
+        opacity: 0;
+        transform: scale(0);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@media (max-width: 768px) {
+    .letter-box {
+        padding: 40px 20px;
+    }
+    
+    .letter-icon {
+        font-size: 3em;
+    }
+    
+    .letter-text {
+        font-size: 8em;
+    }
+    
+    .letter-hint {
+        font-size: 1.3em;
+    }
+    
+    .btn-huge {
+        font-size: 1.4em;
+        padding: 20px 40px;
+        width: 100%;
+    }
+    
+    .history-letter {
+        width: 60px;
+        height: 60px;
+        font-size: 2em;
+    }
+}
