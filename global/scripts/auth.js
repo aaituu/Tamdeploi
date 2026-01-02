@@ -1,99 +1,105 @@
-// API URL Configuration - ИСПРАВЛЕНО
-const API_URL = "/api";
+// Auth Helper - ЕДИНСТВЕННОЕ объявление API_URL
+(function () {
+  "use strict";
 
-console.log("Auth.js loaded, API_URL:", API_URL);
+  // API URL - объявляется только здесь
+  const API_URL = "/api";
 
-function getToken() {
-  return localStorage.getItem("token") || sessionStorage.getItem("token");
-}
+  console.log("Auth.js loaded, API_URL:", API_URL);
 
-function setToken(token, useSession = false) {
-  if (useSession) {
-    sessionStorage.setItem("token", token);
-  } else {
-    localStorage.setItem("token", token);
-  }
-}
-
-function removeToken() {
-  localStorage.removeItem("token");
-  sessionStorage.removeItem("token");
-}
-
-async function verifyToken() {
-  const token = getToken();
-  if (!token) {
-    console.log("No token found");
-    return false;
+  function getToken() {
+    return localStorage.getItem("token") || sessionStorage.getItem("token");
   }
 
-  try {
-    console.log("Verifying token...");
-    const res = await fetch(`${API_URL}/auth/verify.php`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-    });
+  function setToken(token, useSession) {
+    if (useSession) {
+      sessionStorage.setItem("token", token);
+    } else {
+      localStorage.setItem("token", token);
+    }
+  }
 
-    console.log("Verify response status:", res.status);
+  function removeToken() {
+    localStorage.removeItem("token");
+    sessionStorage.removeItem("token");
+  }
 
-    if (res.ok) {
+  async function verifyToken() {
+    const token = getToken();
+    if (!token) {
+      console.log("No token found");
+      return false;
+    }
+
+    try {
+      console.log("Verifying token...");
+      const res = await fetch(`${API_URL}/auth/verify.php`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+
+      console.log("Verify response status:", res.status);
+
+      if (res.ok) {
+        const data = await res.json();
+        console.log("Verify response:", data);
+        return data.success === true;
+      }
+
+      return false;
+    } catch (err) {
+      console.error("Token verification error:", err);
+      return false;
+    }
+  }
+
+  async function fetchProfile() {
+    const token = getToken();
+    if (!token) {
+      console.log("No token for profile");
+      throw new Error("no-token");
+    }
+
+    try {
+      console.log("Fetching profile...");
+      const res = await fetch(`${API_URL}/user/profile.php`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+
+      console.log("Profile response status:", res.status);
+
+      if (!res.ok) {
+        throw new Error("unauthorized");
+      }
+
       const data = await res.json();
-      console.log("Verify response:", data);
-      return data.success === true;
+      console.log("Profile data:", data);
+
+      return data.user;
+    } catch (err) {
+      console.error("Fetch profile error:", err);
+      throw err;
     }
-
-    return false;
-  } catch (err) {
-    console.error("Token verification error:", err);
-    return false;
-  }
-}
-
-async function fetchProfile() {
-  const token = getToken();
-  if (!token) {
-    console.log("No token for profile");
-    throw new Error("no-token");
   }
 
-  try {
-    console.log("Fetching profile...");
-    const res = await fetch(`${API_URL}/user/profile.php`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-    });
+  // Экспортируем в глобальную область
+  window.authHelpers = {
+    getToken: getToken,
+    setToken: setToken,
+    removeToken: removeToken,
+    verifyToken: verifyToken,
+    fetchProfile: fetchProfile,
+    API_URL: API_URL,
+  };
 
-    console.log("Profile response status:", res.status);
-
-    if (!res.ok) {
-      throw new Error("unauthorized");
-    }
-
-    const data = await res.json();
-    console.log("Profile data:", data);
-
-    return data.user;
-  } catch (err) {
-    console.error("Fetch profile error:", err);
-    throw err;
-  }
-}
-
-window.authHelpers = {
-  getToken,
-  setToken,
-  removeToken,
-  verifyToken,
-  fetchProfile,
-  API_URL,
-};
-
-console.log("Auth helpers ready:", window.authHelpers);
+  console.log("Auth helpers ready:", window.authHelpers);
+})();

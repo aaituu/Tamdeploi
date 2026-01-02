@@ -1,8 +1,8 @@
 <?php
 // Database Configuration
 define('DB_HOST', 'localhost');
-define('DB_NAME', 'tamada_db');
-define('DB_USER', 'tamada_admin');
+define('DB_NAME', 'tamadaga_db');
+define('DB_USER', 'tamadaga_admin');
 define('DB_PASS', 'alibali1234');
 define('DB_CHARSET', 'utf8mb4');
 
